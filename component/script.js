@@ -19,67 +19,81 @@ app.loader.load((loader, resources) => {
   kb.watch(app.view);
 
   let tileTextures = [];
-  getLandsaft(tileTextures, resources.tileset.texture);
-
+  let lft = SPRITES_FRAME.landsaft;
   let characterFrames = [];
   window.characterFrames = characterFrames;
-  getCharacter(characterFrames, resources.character.texture);
-
   let monsterFrames = [];
-  getMonsters(monsterFrames, resources.monster.texture);
+  let mstr = SPRITES_FRAME.monster;
+
+  getFrames(
+    tileTextures,
+    resources.tileset.texture,
+    lft.countBitWidth,
+    lft.countBitHeight,
+    lft.width,
+    lft.height
+  );
+
+  getFrames(
+    monsterFrames,
+    resources.monster.texture,
+    mstr.countBitWidth,
+    mstr.countBitHeight,
+    mstr.width,
+    mstr.height
+  );
+
+  getCharacter(characterFrames, resources.character.texture);
+  window.character = CHARACRER;
 
   const blob = new PIXI.Sprite(characterFrames[0]);
+  const potion = new PIXI.Sprite(tileTextures[57]);
   const monster = new PIXI.Sprite(monsterFrames[0]);
-  blob.scale.x = SCALE;
-  blob.scale.y = SCALE;
 
   const sky = new PIXI.Container();
   const background = new PIXI.Container();
   const stage = new PIXI.Container();
 
+  let scrollX = 0;
+  let scrollY = 0;
+
   for (let y = 0; y < map.width; y++) {
     for (let x = 0; x < map.width; x++) {
       let pos = y * map.width + x;
-
       mapAddChild(sky, "sky", tileTextures, pos, x, y);
       mapAddChild(background, "background", tileTextures, pos, x, y);
       mapAddChild(stage, "stage", tileTextures, pos, x, y);
     }
   }
 
-  sky.scale.x = sky.scale.y = SCALE;
-  background.scale.x = background.scale.y = SCALE;
-  stage.scale.x = stage.scale.y = SCALE;
+  let framesDScale = [sky, background, stage, potion, blob];
+  // default scale
 
-  // Add the bunny to the scene we are building
-  app.stage.addChild(sky);
-  app.stage.addChild(background);
-  app.stage.addChild(stage);
-  app.stage.addChild(monster);
-  app.stage.addChild(blob);
+  framesDScale.forEach((fr) => (fr.scale.x = fr.scale.y = SCALE));
 
-  window.character = CHARACRER;
+  monster.scale.x = -1;
+  monster.scale.y = 1.5;
 
-  let scrollX = 0;
-  let scrollY = 0;
+  let dopFeatur = [monster];
+
+  dopFeatur.forEach((dFr) => framesDScale.push(dFr));
+  framesDScale.forEach((fr) => app.stage.addChild(fr));
 
   app.view.focus();
 
+  potion.x = 15;
+  potion.y = 927;
   // Listen for frame updates
   app.ticker.add((time) => {
     blob.x = character.x;
     blob.y = character.y;
-    monster.x = MONSTER.x;
-    monster.y = MONSTER.y;
-    monster.mirrow = 1;
+    blob.scale = character.scale;
+
+    monster.x = MONSTER.x + tileSizeMonsterX;
+    monster.y = MONSTER.y - tileSizeMonsterX / 2;
 
     const characrerPosRight = character.x + tileSizeScale;
     const characrerPosBottom = character.y + characrerHeight;
-
-    character.vy = Math.min(12, character.vy + 1);
-
-    if (character.vx > 0) character.vx -= 1;
-    if (character.vx < 0) character.vx += 1;
 
     let touchingGround =
       testCollision(character.x + 2, characrerPosBottom + 1) ||
@@ -92,6 +106,8 @@ app.loader.load((loader, resources) => {
 
     keyBareControl(kb, character, touchingGround, blob);
     animations(touchingGround, blob);
+
+    screenConteiner1(potion);
   });
 });
 

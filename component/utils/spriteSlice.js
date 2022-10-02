@@ -1,42 +1,20 @@
-function getLandsaft(tileTextures, texture) {
-  const COUNT_BIT_WIDTH = 7;
-  const COUNT_BIT_HEIGHT = 11;
-
-  for (let i = 0; i < COUNT_BIT_WIDTH * COUNT_BIT_HEIGHT; i++) {
-    let x = i % COUNT_BIT_WIDTH;
-    let y = Math.floor(i / COUNT_BIT_WIDTH);
-    tileTextures[i] = new PIXI.Texture(
-      texture,
-      new PIXI.Rectangle(x * tileSize, y * tileSize, tileSize, tileSize)
-    );
-  }
-}
-
-function getMonsters(tileTextures, texture) {
-  const COUNT_BIT_WIDTH = 8;
-  const COUNT_BIT_HEIGHT = 10;
-
-  for (let i = 0; i < COUNT_BIT_WIDTH * COUNT_BIT_HEIGHT; i++) {
-    let x = i % COUNT_BIT_WIDTH;
-    let y = Math.floor(i / COUNT_BIT_WIDTH);
-    tileTextures[i] = new PIXI.Texture(
-      texture,
-      new PIXI.Rectangle(
-        x * tileSizeMonster,
-        y * tileSizeMonster,
-        tileSizeMonster,
-        tileSizeMonster
-      )
-    );
-  }
-}
-
 function getCharacter(characterFrames, feature) {
   const COUNT_BIT_HEIGHT = 8;
   for (let i = 0; i < COUNT_BIT_HEIGHT; i++) {
     characterFrames[i] = new PIXI.Texture(
       feature,
       new PIXI.Rectangle(i * tileSize, 0, tileSize, tileSize * 2)
+    );
+  }
+}
+
+function getFrames(charFr, feature, cWidth, cHeight, fWidth, fHeight) {
+  for (let i = 0; i < cWidth * cHeight; i++) {
+    let x = i % cWidth;
+    let y = Math.floor(i / cWidth);
+    charFr[i] = new PIXI.Texture(
+      feature,
+      new PIXI.Rectangle(x * fWidth, y * fHeight, fWidth, fHeight)
     );
   }
 }

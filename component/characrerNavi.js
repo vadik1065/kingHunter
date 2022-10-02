@@ -1,7 +1,13 @@
 function characrerNavi(character) {
   let map = window.map;
+
+  character.vy = Math.min(12, character.vy + 1);
+
+  if (character.vx > 0) character.vx -= 1;
+  if (character.vx < 0) character.vx += 1;
   if (character.vy > 0) {
     // на земле
+
     for (let i = 0; i < character.vy; i++) {
       let testX1 = character.x + 2;
       let testX2 = character.x + tileSizeScale - 3;
@@ -18,11 +24,14 @@ function characrerNavi(character) {
     }
   }
   if (character.vy < 0) {
+    let tileSizeScale = character.scale.x == 1 ? 16 : 32;
+
     // в воздухе
     for (let i = character.vy; i < 0; i++) {
       let testX1 = character.x + 2;
       let testX2 = character.x + tileSizeScale - 3;
       let testY = character.y + 5;
+
       if (testCollision(testX1, testY) || testCollision(testX2, testY)) {
         character.vy = 0;
         break;
@@ -32,6 +41,8 @@ function characrerNavi(character) {
   }
 
   if (character.vx > 0) {
+    let tileSizeScale = character.scale.x == 1 ? 16 : 32;
+
     // вперёд
     character.direction = 0;
     for (let i = 0; i < character.vx; i++) {
@@ -52,6 +63,8 @@ function characrerNavi(character) {
     }
   }
   if (character.vx < 0) {
+    let tileSizeScale = character.scale.x == 1 ? 16 : 32;
+
     // назад
     character.direction = 1;
     for (let i = character.vx; i < 0; i++) {

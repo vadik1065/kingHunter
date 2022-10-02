@@ -14,7 +14,7 @@ function keyBareControl(kb, character, touchingGround) {
     character.jumped = false;
   }
   if (kb.pressed.ArrowUp && touchingGround && !character.jumped) {
-    character.vy = -19;
+    character.vy = -1 * character.jupmHeight;
     character.jumped = true;
   }
 }

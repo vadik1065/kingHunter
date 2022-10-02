@@ -12,9 +12,9 @@ class Keyboard {
     });
   }
 }
-function testCollision(worldX, worldY) {
-  let mapX = Math.floor(worldX / tileSize / SCALE);
-  let mapY = Math.floor(worldY / tileSize / SCALE);
+function testCollision(worldX, worldY, sc = SCALE) {
+  let mapX = Math.floor(worldX / tileSize / sc);
+  let mapY = Math.floor(worldY / tileSize / sc);
   let map = window.map;
   return map.collision[mapY * map.width + mapX];
 }
